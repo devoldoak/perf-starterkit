@@ -1,0 +1,46 @@
+version: '3'
+services:
+  telegraf-server:
+    image: soprasteria/telegraf
+    build: telegraf
+    depends_on:
+      - influxdb-db
+    ports:
+      - 8125:8125/udp
+
+  influxdb-db:
+    image: influxdb:1.1.4
+    volumes:
+      - influxdb-data:/influxdb-data
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+    ports:
+      - 8083:8083
+      - 8086:8086
+
+
+  grafana-server:
+    image: grafana/grafana:4.1.2
+    depends_on:
+      - influxdb-db
+    environment:
+      - HTTP_USER=admin
+      - HTTP_PASS=admin
+      - INFLUXDB_HOST=influxdb-db
+      - INFLUXDB_PORT=8086
+      - INFLUXDB_NAME=perf-monitor
+      - INFLUXDB_USER=root
+      - INFLUXDB_PASS=root
+    ports:
+      - 3000:3000
+
+  grafana-config:
+      build: grafana
+      depends_on:
+        - grafana-server
+      environment:
+        - GRAFANA_USER=admin
+        - GRAFANA_PASS=admin
+
+volumes:
+  influxdb-data:    { external: { name: influxdb-data } }

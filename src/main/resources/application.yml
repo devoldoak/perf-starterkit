@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: perf-stk
+
+  metrics.export:
+    delay-millis: 1000
+    statsd:
+      host: 127.0.0.1
+
+management.security.enabled: false
+
+logging.level:
+  root: INFO
+  org.springframework.boot.actuate.metrics.statsd: TRACE
+
