@@ -1,4 +1,4 @@
-# Performance stater kit
+# Performance starter kit
 
 Stack with :
 - Spring boot
